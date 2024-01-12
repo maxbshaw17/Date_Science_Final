@@ -282,3 +282,5 @@ data$marital_status <- str_replace(data$marital_status, "4", "Divorced")
 data$marital_status <- str_replace(data$marital_status, "3", "Widower")
 data$marital_status <- str_replace(data$marital_status, "2", "Married")
 data$marital_status <- str_replace(data$marital_status, "1", "Single")
+
+
