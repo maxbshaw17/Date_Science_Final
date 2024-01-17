@@ -283,4 +283,14 @@ data$marital_status <- str_replace(data$marital_status, "3", "Widower")
 data$marital_status <- str_replace(data$marital_status, "2", "Married")
 data$marital_status <- str_replace(data$marital_status, "1", "Single")
 
+#graphs!!!
+ggplot(data, aes(x = age_at_enrollment)) +
+  geom_bar(aes(fill = target))
 
+ggplot(data, aes(x = nationality)) +
+  geom_bar()
+
+ggplot(data, aes(x = curricular_units_1st_sem_grade, y = curricular_units_2nd_sem_grade)) +
+  geom_jitter(width = .2, height = .2, aes(color = target, alpha = .8)) +
+  xlim(10, 20) +
+  ylim(10, 20)
