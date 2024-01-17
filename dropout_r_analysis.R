@@ -283,6 +283,7 @@ data$marital_status <- str_replace(data$marital_status, "3", "Widower")
 data$marital_status <- str_replace(data$marital_status, "2", "Married")
 data$marital_status <- str_replace(data$marital_status, "1", "Single")
 
+view(data)
 #graphs!!!
 ggplot(data, aes(x = age_at_enrollment)) +
   geom_bar(aes(fill = target))
