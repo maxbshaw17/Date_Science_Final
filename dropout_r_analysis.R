@@ -284,6 +284,7 @@ data$marital_status <- str_replace(data$marital_status, "2", "Married")
 data$marital_status <- str_replace(data$marital_status, "1", "Single")
 
 view(data)
+
 #graphs!!!
 ggplot(data, aes(x = age_at_enrollment)) +
   geom_bar(aes(fill = target))
@@ -295,3 +296,21 @@ ggplot(data, aes(x = curricular_units_1st_sem_grade, y = curricular_units_2nd_se
   geom_jitter(width = .2, height = .2, aes(color = target, alpha = .8)) +
   xlim(10, 20) +
   ylim(10, 20)
+
+data_by_course_failed <- data |>
+  filter(target = "Dropout")
+  group_by(course) |>
+  summarize(avg_age = mean(age_at_enrollment))
+  
+data_by_course_graduated <- data |>
+  filter(target = "Graduate")
+  group_by(course) |>
+  summarize(avg_age = mean(age_at_enrollment))
+
+a <-ggplot(data, aes(x = course, y = mean(age_at_enrollment))) +
+  geom_point()
+
+
+#  theme(axis.text.x = element_text(angle = 270, hjust = 1, vjust = 1))
+
+
