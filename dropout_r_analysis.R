@@ -312,5 +312,5 @@ a <-ggplot(data, aes(x = course, y = mean(age_at_enrollment))) +
 
 
 #  theme(axis.text.x = element_text(angle = 270, hjust = 1, vjust = 1))
-
+sdsdsd
 
