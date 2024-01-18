@@ -298,19 +298,43 @@ ggplot(data, aes(x = curricular_units_1st_sem_grade, y = curricular_units_2nd_se
   ylim(10, 20)
 
 data_by_course_failed <- data |>
-  filter(target = "Dropout")
+  filter(target == "Dropout") |>
   group_by(course) |>
-  summarize(avg_age = mean(age_at_enrollment))
+  summarize(avg_age = mean(age_at_enrollment)) |>
+  arrange(avg_age)
   
 data_by_course_graduated <- data |>
-  filter(target = "Graduate")
+  filter(target == "Graduate") |>
   group_by(course) |>
-  summarize(avg_age = mean(age_at_enrollment))
+  summarize(avg_age = mean(age_at_enrollment)) |>
+  arrange(avg_age)
 
-a <-ggplot(data, aes(x = course, y = mean(age_at_enrollment))) +
-  geom_point()
+data_by_course_enrolled <- data |>
+  filter(target == "Enrolled") |>
+  group_by(course) |>
+  summarize(avg_age = mean(age_at_enrollment)) |>
+  arrange(avg_age)
+
+a <- ggplot(data_by_course_failed, aes(x = fct_inorder(course), y = avg_age)) +
+  geom_point(aes(color = "Dropout", stroke = 2)) +
+  geom_point(data = data_by_course_graduated, aes(color = "Graduate", stroke = 2)) +
+  geom_point(data = data_by_course_enrolled, aes(color = "Enrolled", stroke = 2)) +
+  scale_color_manual(values=c('red','orange', 'green')) +
+  theme(
+    text = element_text(family = "serif"),
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    plot.margin = margin(t = 20,l = 55), 
+    plot.title = element_text(size=34),
+    axis.title = element_text(size=26)
+    ) +
+  labs(
+    title = "Average Age of Target Based on Major",
+    colour = "Enrollment Status",
+    y = "Age",
+    x = "Course"
+  )
+
+a
 
 
-#  theme(axis.text.x = element_text(angle = 270, hjust = 1, vjust = 1))
-sdsdsd
 
