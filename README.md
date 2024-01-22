@@ -9,8 +9,7 @@ R is used for statistical analysis and graph creation and Python is used for mac
 
 ## Authors
 
-Maximillian Bradshaw
-Jake Dorick
+Maximillian Bradshaw and Jake Dorick
 
 ## Acknowledgements
 
