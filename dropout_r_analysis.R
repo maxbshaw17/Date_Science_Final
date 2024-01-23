@@ -287,8 +287,6 @@ data$marital_status <- str_replace(data$marital_status, "1", "Single")
 view(data)
 
 #graphs!!!
-ggplot(data, aes(x = age_at_enrollment)) +
-  geom_bar(aes(fill = target))
 
 ggplot(data, aes(x = nationality)) +
   geom_bar()
@@ -336,22 +334,72 @@ a
 
 b <- ggplot(data, aes(x = curricular_units_1st_sem_grade, y = curricular_units_2nd_sem_grade)) +
   geom_jitter(width = .2, height = .2, aes(color = target, alpha = .8)) +
+  scale_alpha(guide = 'none') +
   xlim(10, 20) +
   ylim(10, 20) +
+  theme(
+    text = element_text(family = "serif"),
+    plot.title = element_text(size=34),
+    axis.title = element_text(size=26),
+    legend.position='bottom'
+  ) +
+  labs(
+    title = "First and Second Semester Curricular Units",
+    colour = "Enrollment Status",
+    y = "Second Semester Curricular Units",
+    x = "First Semester Curricular Units"
+  )
+
+b <- ggMarginal(b, groupColour = TRUE, groupFill = TRUE)
+
+b
+
+c <-ggplot(data, aes(x = age_at_enrollment)) +
+  geom_bar(aes(fill = target)) +
   theme(
     text = element_text(family = "serif"),
     plot.title = element_text(size=34),
     axis.title = element_text(size=26)
   ) +
   labs(
-    title = "Average Age of Target Based on Major",
+    title = "Enrollment Status by Age",
     colour = "Enrollment Status",
-    y = "Second Semester Curricular Units",
-    x = "First Semester Curricular Units"
+    y = "Total Students",
+    x = "Age",
+    fill = "Enrollment Status"
   )
 
-b <- ggMarginal(b, type = "histogram", fill=target)
+c
 
-b
+data_by_major_status <- data |>
+  group_by(course, target) |>
+  tally()
+  
+data_by_major_status <- data_by_major_status |>
+  group_by(course) |>
+  summarize(target, graduate_ratio = n / sum(n))
 
+data_by_major_status <- data_by_major_status |>
+  filter(target == "Dropout")
 
+data_by_major_status$course <- factor(data_by_major_status$course, levels = data_by_major_status$course[order(data_by_major_status$graduate_ratio)])
+
+data_by_major_status$graduate_ratio <- round(data_by_major_status$graduate_ratio, digits = 3)
+
+d <- ggplot(data_by_major_status, aes(x=course, y=graduate_ratio, label=graduate_ratio)) + 
+  geom_point(stat='identity', size=12)  +
+  geom_text(color="white", size=3) +
+  labs(title="Dropout Ratio by Major", 
+       subtitle="Dropout Ratio = Total Dropouts / Total Students",
+       y = "Course",
+       x = "Dropout Ratio") +
+  theme(
+    text = element_text(family = "serif"),
+    plot.title = element_text(size=34),
+    axis.title = element_text(size=26),
+    plot.margin = margin(l=20, t = 10, b = 10),
+    axis.title.y = element_text(vjust=3)) +
+  ylim(0, 1) +
+  coord_flip()
+
+d
