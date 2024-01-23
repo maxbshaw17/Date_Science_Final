@@ -2,6 +2,7 @@
 library(tidyverse)
 library(stringr)
 library(janitor)
+library(ggExtra)
 
 #Reading and cleaning data
 data <- read_csv("dataset.csv")
@@ -292,10 +293,7 @@ ggplot(data, aes(x = age_at_enrollment)) +
 ggplot(data, aes(x = nationality)) +
   geom_bar()
 
-ggplot(data, aes(x = curricular_units_1st_sem_grade, y = curricular_units_2nd_sem_grade)) +
-  geom_jitter(width = .2, height = .2, aes(color = target, alpha = .8)) +
-  xlim(10, 20) +
-  ylim(10, 20)
+
 
 data_by_course_failed <- data |>
   filter(target == "Dropout") |>
@@ -336,5 +334,24 @@ a <- ggplot(data_by_course_failed, aes(x = fct_inorder(course), y = avg_age)) +
 
 a
 
+b <- ggplot(data, aes(x = curricular_units_1st_sem_grade, y = curricular_units_2nd_sem_grade)) +
+  geom_jitter(width = .2, height = .2, aes(color = target, alpha = .8)) +
+  xlim(10, 20) +
+  ylim(10, 20) +
+  theme(
+    text = element_text(family = "serif"),
+    plot.title = element_text(size=34),
+    axis.title = element_text(size=26)
+  ) +
+  labs(
+    title = "Average Age of Target Based on Major",
+    colour = "Enrollment Status",
+    y = "Second Semester Curricular Units",
+    x = "First Semester Curricular Units"
+  )
+
+b <- ggMarginal(b, type = "histogram", fill=target)
+
+b
 
 
